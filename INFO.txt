@@ -1,0 +1,19 @@
+node webpage:
+session management??
+user select a local file, upload please
+sent to chosen s3 bucket in a subfolder reflecting username, filename is provided by user
+user gets error/success or in progress
+
+database for user information? already exist?
+
+switch to typescript
+
+
+universal character set for uploaded filename
+what does S3 allow? can it be converted nicely?
+test file size max
+	what happens if only part of the file gets uploaded?
+
+can the user upload more than one file? sure
+
+

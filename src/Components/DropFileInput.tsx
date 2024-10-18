@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import './borrowedcss.css';
 
 
@@ -82,10 +81,6 @@ const DropFileInput = () => {
             }
         </>
     );
-}
-
-DropFileInput.propTypes = {
-    onFileChange: PropTypes.func
 }
 
 export default DropFileInput;

@@ -23,7 +23,7 @@ export const Header3 = styled.div`
 `;
 
 export const Header4 = styled.div`
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 500;
     line-height: 30px;
     margin: 10px 0;

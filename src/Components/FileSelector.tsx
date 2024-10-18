@@ -3,21 +3,17 @@
 import React, { FC } from 'react';
 import {
   Container,
-  CssBaseline,
   Box,
-  Typography,
-  TextField,
   Button,
   List,
-  ListItem,
-  ListItemText,
-  ButtonGroup,
 } from "@mui/material";
 import UploadToS3 from '../app/S3Uploader';
 import { useRef, useState } from 'react';
 import { Upload } from '@mui/icons-material';
-import {FileToUpload, FileUploaded} from './FileDisplay';
-import { Header2, Header4 } from '@/app/Theme/Typography';
+import { StyledFile, StyledCheck, StyledX} from './FileDisplay';
+import { Header4 } from '@/app/Theme/Typography';
+import {toast, ToastContainer} from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css";
 
 
 const USERNAME: string = "CPSUser1";
@@ -25,7 +21,7 @@ const USERNAME: string = "CPSUser1";
 const FileSelector: FC = () => {
 
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [fileList, setFileList]                   = useState<File[]>([]);
+    const [fileList, setFileList]                   = useState<File[]>([]); //these set functions dont actually work but they gotta be there anyway
     const [uploadedFilesList, setUploadedFilesList] = useState<File[]>([]);
     const [submitActive, setSubmit]                 = useState(fileList.length > 0);
 
@@ -44,21 +40,21 @@ const FileSelector: FC = () => {
         e.preventDefault();
         if (!inputRef || !inputRef.current) return;
         fileList.forEach((file) => {
-            UploadToS3(file, USERNAME); //need a success condition here
-            uploadedFilesList.push(file);
+            UploadToS3(file, USERNAME).then(() => {
+                uploadedFilesList.push(file);
+                fileList.splice(fileList.indexOf(file), 1);
+                updateSubmit();
+            }, () => {toast(`${file.name} failed to upload`)} );
         })
-        fileList.splice(0, fileList.length);
-        updateSubmit();
     };
 
     function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
         const files = e.target.files;
         if (!files) return;
-        const filesArray = Array.from(files); 
-        filesArray.forEach((item) =>{
-            fileList.push(item);
-            console.log(`pushing ${item.name} to fileList`);
-        });
+        const file = files[0];
+        fileList.push(file);
+        setFileList([...fileList]);
+        console.log(`pushing ${file.name} to fileList`);
         updateSubmit();
     };
     
@@ -66,15 +62,15 @@ const FileSelector: FC = () => {
     return (
         <Container maxWidth="sm">
             <Box sx={{mt: 20,display: "flex", flexDirection: "column", alignItems: "center"}}>
+            <ToastContainer/>
                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: "left"}}>
-                    <Header4>Select file to upload</Header4>
-                    {/* <Box sx={{display: 'flex', flexDirection: 'column', alignItems: "left"}}> */}
-
-                            {fileList.map((item) => ( 
-                                <FileToUpload className='' key={item.name} filename={item.name}/>))}
-                            {uploadedFilesList.map((item) => ( 
-                                <FileUploaded className='' key={item.name} filename={item.name}/>))}
-
+                    <Header4 className='' style={{display: fileList.length? 'none': 'block'}}>No file selected</Header4>
+                    <List>
+                        {fileList.map((item) => ( 
+                            <StyledFile key={item.name} className=''filename={item.name} check={false}></StyledFile>))}
+                        {uploadedFilesList.map((item) => ( 
+                            <StyledFile className='' key={item.name} filename={item.name} check={true}></StyledFile>))}
+                    </List>
                     <Box sx={{ mt: 1, display: 'flex' }}>
                         <Button variant="contained" sx={{ mt: 3, mb: 2 }} onClick={handleBrowse}>
                             Browse Files

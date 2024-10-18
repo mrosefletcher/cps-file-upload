@@ -7,8 +7,9 @@ import DropFileInput from '@/Components/DropFileInput';
 export default function Home() {
   return (
     <>
-      <FileSelector/>
       {/* <DropFileInput/> */}
+      <FileSelector/>
+
     </>
   );
 }

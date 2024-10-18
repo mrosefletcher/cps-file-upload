@@ -13,6 +13,7 @@ universal character set for uploaded filename
 what does S3 allow? can it be converted nicely?
 test file size max
 	what happens if only part of the file gets uploaded?
+	"Amazon S3 never adds partial objects; if you receive a success response, Amazon S3 added the entire object to the bucket. "
 
 can the user upload more than one file? sure
 

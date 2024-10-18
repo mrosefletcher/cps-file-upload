@@ -12,7 +12,7 @@ const s3Client = new S3Client({ region: 'us-west-2',
 });
 const BUCKET = "cps-web-server-target";
 
-export default async function UploadToS3(file: File | null, dir:string): Promise<GetObjectCommandOutput> {
+export default async function UploadToS3(file: File | null, dir:string){
     var fileContents = null;
     var uploadName = "";
     if (file) {
@@ -28,10 +28,15 @@ export default async function UploadToS3(file: File | null, dir:string): Promise
         }
     } else { return Promise.reject("Someone clicked submit without choosing a file"); };
 
-    return await s3Client.send(
+    try{
+        await s3Client.send(
         new PutObjectCommand({
             Bucket: BUCKET,
             Key: `${dir}/${uploadName}`,
             Body: `${fileContents}`,
         }));
+    }catch(e){
+        console.log("uploadtoS3 failed");
+        console.log(e);
+    }
 };

@@ -1,18 +1,16 @@
 'use client';
 
-import React, { FC } from 'react';
-import {
-  Container,
-  Box,
-  Button,
-  List,
-} from "@mui/material";
+import React, { FC, useRef, useState } from 'react';
+import styled from '@emotion/styled';
+import { Container, Box, Button, Divider } from "@mui/material";
 import UploadToS3 from '../app/S3Uploader';
-import { useRef, useState } from 'react';
 import { Upload } from '@mui/icons-material';
-import { StyledFile, StyledCheck, StyledX} from './FileDisplay';
-import { Header4 } from '@/app/Theme/Typography';
+import * as FileDisplay from './FileDisplay';
+import { Header4, Header5 } from '@/app/Theme/Typography';
+import * as Colors from '@/app/Theme/Colors';
+import * as Section from './Section';
 import {toast, ToastContainer} from 'react-toastify'
+
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -21,13 +19,20 @@ const USERNAME: string = "CPSUser1";
 const FileSelector: FC = () => {
 
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [fileList, setFileList]                   = useState<File[]>([]); //these set functions dont actually work but they gotta be there anyway
+    const [fileList, setFileList]                   = useState<File[]>([]); 
     const [uploadedFilesList, setUploadedFilesList] = useState<File[]>([]);
-    const [submitActive, setSubmit]                 = useState(fileList.length > 0);
+    const [submitActive, setSubmit]                 = useState(fileList.length > 0? Colors.BLUE: Colors.GREYED);
+    const [fileSelected, setFileSelected]           = useState(fileList.length > 0 && uploadedFilesList.length >0);
+
+    const PleaseSelectFile = styled(Header5)`
+        display: ${fileSelected? 'none': 'block'};
+        color: ${Colors.ERROR};
+        font-style: italic;
+    `;
 
     function updateSubmit(){
         console.log(`in update submit: fileList.length = ${fileList.length}`);
-        fileList.length ? setSubmit(true) : setSubmit(false);
+        fileList.length ? setSubmit(Colors.SUCCESS) : setSubmit(Colors.GREYED);
     };
 
     function handleBrowse(e: React.MouseEvent<HTMLButtonElement>) {
@@ -60,30 +65,38 @@ const FileSelector: FC = () => {
     
 
     return (
-        <Container maxWidth="sm">
-            <Box sx={{mt: 20,display: "flex", flexDirection: "column", alignItems: "center"}}>
+
+            
+            <Section.SectionBackground>
             <ToastContainer/>
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: "left"}}>
-                    <Header4 className='' style={{display: fileList.length? 'none': 'block'}}>No file selected</Header4>
-                    <List>
-                        {fileList.map((item) => ( 
-                            <StyledFile key={item.name} className=''filename={item.name} check={false}></StyledFile>))}
-                        {uploadedFilesList.map((item) => ( 
-                            <StyledFile className='' key={item.name} filename={item.name} check={true}></StyledFile>))}
-                    </List>
-                    <Box sx={{ mt: 1, display: 'flex' }}>
-                        <Button variant="contained" sx={{ mt: 3, mb: 2 }} onClick={handleBrowse}>
+                <Section.SectionContent>
+                    <Header4 style={{color: Colors.TEXT.grey}}>Please select a file to upload:</Header4>
+                    <Box sx={{ mt: 1, display: 'flex' }}> {/* put the buttons in a row*/}
+                        <Button variant="contained" sx={{ mt: 3, mb: 2, backgroundColor: Colors.BLUE}} onClick={handleBrowse}>
                             Browse Files
                         </Button>
-                        <Button variant="contained" sx={{ mt: 3, mb: 2, ml: 3 }} style={{ backgroundColor: submitActive  ? 'rgb(25, 118, 210)' : '#AAAFB4' }} onClick={handleSubmit}>
+                        <Button variant="contained" sx={{ mt: 3, mb: 2, ml: 3 }} style={{ backgroundColor: submitActive }} onClick={handleSubmit}>
                             Submit
                             <Upload sx={{paddingLeft: 1}}/>
                         </Button>
                         <input ref={inputRef} type='file' hidden onChange={handleFileSelect} />  
                     </Box>
-                </Box>
-            </Box>
-        </Container>
+                <Divider style={{marginBottom: '10px'}}/>
+                <FileDisplay.StyledFile style={{display: fileSelected? 'block': 'none'}}>no file selected</FileDisplay.StyledFile>
+                {fileList.map((item) => ( 
+                    <Section.DivFlexRow>
+                        <FileDisplay.StyledX/>
+                        <FileDisplay.StyledFile key={item.name}>{item.name}</FileDisplay.StyledFile>
+                    </Section.DivFlexRow>))}
+                {uploadedFilesList.map((item) => ( 
+                    <Section.DivFlexRow>
+                        <FileDisplay.StyledCheck/>
+                        <FileDisplay.StyledFile key={item.name}>{item.name}</FileDisplay.StyledFile>
+                        </Section.DivFlexRow>))}
+                    
+                </Section.SectionContent>
+            </Section.SectionBackground>
+
     )
 };
 

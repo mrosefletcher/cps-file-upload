@@ -8,7 +8,7 @@ import { FetchHttpHandler } from "@smithy/fetch-http-handler";
   //https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/cors.html
 
 const s3Client = new S3Client({ region: 'us-west-2', 
-    requestHandler: new FetchHttpHandler({ keepAlive: false })
+    requestHandler: new FetchHttpHandler({ keepAlive: false }),
 });
 const BUCKET = "cps-web-server-target";
 
@@ -32,7 +32,7 @@ export default async function UploadToS3(file: File | null, dir:string){
         }));
     }catch(e){
         console.log(e);
-        return Promise.resolve("simulate success?");
-        return Promise.reject("upload failed"); //does this even do anything lol
+        //return Promise.resolve("simulate success?");
+        return Promise.reject("upload failed");
     }
 };

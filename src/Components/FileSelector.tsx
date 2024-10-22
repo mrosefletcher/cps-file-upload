@@ -14,7 +14,7 @@ import {toast, ToastContainer} from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css";
 
 
-const USERNAME: string = "CPSUser1";
+const USERNAME: string = "1022Demo";
 
 const FileSelector: FC = () => {
 
@@ -53,7 +53,7 @@ const FileSelector: FC = () => {
         })
     };
 
-    function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) { //check for already uploaded file
         const files = e.target.files;
         if (!files) return;
         const file = files[0];
@@ -84,14 +84,14 @@ const FileSelector: FC = () => {
                 <Divider style={{marginBottom: '10px'}}/>
                 <FileDisplay.StyledFile style={{display: fileSelected? 'block': 'none'}}>no file selected</FileDisplay.StyledFile>
                 {fileList.map((item) => ( 
-                    <Section.DivFlexRow>
+                    <Section.DivFlexRow key={item.name}>
                         <FileDisplay.StyledX/>
-                        <FileDisplay.StyledFile key={item.name}>{item.name}</FileDisplay.StyledFile>
+                        <FileDisplay.StyledFile> {item.name} </FileDisplay.StyledFile>
                     </Section.DivFlexRow>))}
                 {uploadedFilesList.map((item) => ( 
-                    <Section.DivFlexRow>
+                    <Section.DivFlexRow key={item.name}>
                         <FileDisplay.StyledCheck/>
-                        <FileDisplay.StyledFile key={item.name}>{item.name}</FileDisplay.StyledFile>
+                        <FileDisplay.StyledFile> {item.name} </FileDisplay.StyledFile>
                         </Section.DivFlexRow>))}
                     
                 </Section.SectionContent>

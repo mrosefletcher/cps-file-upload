@@ -1,5 +1,8 @@
+:root{
+  --background: rgb(244, 247, 231);
+}
 html, body {
-  background-color: transparent;
+  background-color: var(--background);
   scroll-behavior: smooth;
   transition: all 3s;
   padding: 0;

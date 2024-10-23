@@ -10,7 +10,7 @@ export const SectionBackground= styled.div({
     boxSizing: 'border-box',
     display: 'block',
     padding: SECTION_PADDING,
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: Colors.YELLOW,
 });
 
 export const SectionContent= styled.div({
@@ -18,14 +18,15 @@ export const SectionContent= styled.div({
     flexDirection: 'column',
     margin: 'auto',
     padding: SECTION_PADDING,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'flex-start',
     width: 'fit-content',
     maxWidth: MAX_CONTENT_WIDTH,
-    backgroundColor: Colors.YELLOW,
+    backgroundColor: 'white',
 });
 
 export const DivFlexRow = styled.div({
     display: 'flex',
-    width: 'fit-content',
+    width: '100%',
+    margin: 0
 });

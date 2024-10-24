@@ -38,8 +38,10 @@ const FileSelector: FC = () => {
         inputRef.current.click();
     };
 
+    function clearInputValue(e: React.MouseEvent<HTMLInputElement>){
+        document.getElementsByTagName('input')[0].value = ""
+    }
     function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) { 
-        //e.preventDefault();
         console.log("in fileSelect:");
         const files = e.target.files;
         if (!files) return;
@@ -72,7 +74,7 @@ const FileSelector: FC = () => {
         console.log(fileList.delete(file));
         updateSubmit();
     };
-    
+
     return (
             <Section.SectionBackground>
                 <ToastContainer/>
@@ -86,7 +88,7 @@ const FileSelector: FC = () => {
                             Submit
                             <Upload sx={{paddingLeft: 1}}/>
                         </Button>
-                        <input multiple ref={inputRef} type='file' hidden onChange={handleFileSelect}/>  
+                        <input multiple ref={inputRef} type='file' hidden onChange={handleFileSelect} onClick={clearInputValue}/>  
                     </Box>
                     <Divider sx={{width: '100%', margin: '15px 0', borderColor: 'black'}}/>
                     <Box sx={{display: 'flex', flexDirection: 'column',width: '100%', height: 'fit-content'}}>
